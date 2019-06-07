@@ -1,7 +1,9 @@
 ﻿using GraphQL;
+using GraphQL.Subscription;
 using GraphQL.Types;
 using Microsoft.AspNetCore.WebUtilities;
 using Ptncafe.GraphQLTest.Api.GraphQLType;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
         public CommentSchema(IDependencyResolver resolver) : base(resolver)
         {
             Query = resolver.Resolve<CommentQuery>();
+            Mutation = resolver.Resolve<CommentMutation>();
         }
     }
 
@@ -50,6 +53,12 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
                     return await ResolveCommentApi(url, context);
                 }
             );
+            //AddField(new EventStreamFieldType
+            //{
+            //    Name = "Thêm comment",
+            //    Type = typeof(CommentType),
+            //    Resolver = new FuncFieldResolver<CommentType>(ResolveMessage),
+            //});
         }
 
         private static async Task<IEnumerable<Model.Comment>> ResolveCommentApi(string url, ResolveFieldContext<object> context)
@@ -77,6 +86,45 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Model.Comment>>(responseString);
                 return result;
             }
+        }
+
+        private CommentType ResolveMessage(ResolveFieldContext context)
+        {
+            return context.Source as CommentType;
+        }
+
+        private IObservable<CommentType> Subscribe(ResolveEventStreamContext context)
+        {
+            return null;
+        }
+    }
+
+    public class CommentInputType : InputObjectGraphType
+    {
+        public CommentInputType()
+        {
+            Name = "CommentInput";
+            Field<NonNullGraphType<StringGraphType>>("id");
+            Field<StringGraphType>("Name");
+        }
+    }
+
+
+
+    public class CommentMutation : ObjectGraphType
+    {
+        public CommentMutation()
+        {
+            Field<CommentType>(
+              "createcomment",
+              arguments: new QueryArguments(
+                new QueryArgument<NonNullGraphType<CommentInputType>> { Name = "CommentInput" }
+              ),
+              resolve: context =>
+              {
+                  var human = context.GetArgument<Model.Comment>("CommentInput");
+                  return new Model.Comment();
+              });
         }
     }
 }
