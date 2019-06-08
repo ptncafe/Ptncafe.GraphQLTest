@@ -104,7 +104,7 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
         public CommentInputType()
         {
             Name = "CommentInput";
-            Field<NonNullGraphType<StringGraphType>>("id");
+            Field<NonNullGraphType<GraphQL.Types.IntGraphType>>("id");
             Field<StringGraphType>("Name");
         }
     }
@@ -118,12 +118,12 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
             Field<CommentType>(
               "createcomment",
               arguments: new QueryArguments(
-                new QueryArgument<NonNullGraphType<CommentInputType>> { Name = "CommentInput" }
+                new QueryArgument<NonNullGraphType<CommentInputType>> { Name = "commentInput" }
               ),
               resolve: context =>
               {
-                  var human = context.GetArgument<Model.Comment>("CommentInput");
-                  return new Model.Comment();
+                  var requestData = context.GetArgument<Model.Comment>("commentInput");
+                  return requestData;
               });
         }
     }
