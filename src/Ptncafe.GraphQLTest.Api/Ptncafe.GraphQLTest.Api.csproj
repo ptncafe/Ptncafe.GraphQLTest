@@ -11,6 +11,15 @@
     <PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="GraphQLType\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ptncafe.GraphQLTest.Proxy\Ptncafe.GraphQLTest.Proxy.csproj" />
   </ItemGroup>
 
 </Project>

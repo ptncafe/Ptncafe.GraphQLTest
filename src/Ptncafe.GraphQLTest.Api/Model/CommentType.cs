@@ -1,12 +1,13 @@
 ﻿using GraphQL.Types;
+using Ptncafe.GraphQLTest.Proxy.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ptncafe.GraphQLTest.Api.GraphQLType
+namespace Ptncafe.GraphQLTest.Api.Model
 {
-    public class CommentType : ObjectGraphType<Model.Comment>
+    public class CommentType : ObjectGraphType<Comment>
     {
         public CommentType()
         {

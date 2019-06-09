@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ptncafe.GraphQLTest.Api.GraphQLSchema;
+using Ptncafe.GraphQLTest.Proxy;
 
 namespace Ptncafe.GraphQLTest.Api
 {
@@ -27,12 +28,18 @@ namespace Ptncafe.GraphQLTest.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient<IConmentProxy, ConmentProxy>();
+
+
+
             services.AddScoped<GraphQL.IDependencyResolver>(x =>
                new GraphQL.FuncDependencyResolver(x.GetRequiredService));
 
-            services.AddScoped<CommentQuery>();
+            services.AddSingleton<CommentQuery>();
+            services.AddSingleton<CommentMutation>();
+
             services.AddScoped<CommentSchema>();
-            //services.AddSingleton(s => new StarWarsSchema(new FuncDependencyResolver(type => (IGraphType)s.GetRequiredService(type))));
+
             services.AddGraphQL(options =>
             {
                 options.EnableMetrics = true;
