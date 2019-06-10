@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
@@ -9,9 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Ptncafe.GraphQLTest.Api.GraphQLSchema;
+using Ptncafe.GraphQLTest.Api.Mapper;
 using Ptncafe.GraphQLTest.Proxy;
 
 namespace Ptncafe.GraphQLTest.Api
@@ -28,9 +24,9 @@ namespace Ptncafe.GraphQLTest.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<IConmentProxy, ConmentProxy>();
+            services.AddHttpClient<ICommentProxy, CommentProxy>();
 
-
+            services.AddAutoMapper(typeof(CommentMapProfile));
 
             services.AddScoped<GraphQL.IDependencyResolver>(x =>
                new GraphQL.FuncDependencyResolver(x.GetRequiredService));
@@ -60,14 +56,12 @@ namespace Ptncafe.GraphQLTest.Api
                 app.UseDeveloperExceptionPage();
             }
 
-       
             // use HTTP middleware for ChatSchema at path /graphql
             app.UseGraphQL<CommentSchema>("/graphql");
 
             // use graphql-playground middleware at default url /ui/playground
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
 
-      
             app.UseMvc();
         }
     }

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Ptncafe.GraphQLTest.Proxy
 {
-    public class ConmentProxy : IConmentProxy
+    public class CommentProxy : ICommentProxy
     {
         private string _url;
         private HttpClient _httpClient;
-        private ILogger<ConmentProxy> _logger;
-        public ConmentProxy(HttpClient httpClient, ILogger<ConmentProxy> logger)
+        private ILogger<CommentProxy> _logger;
+        public CommentProxy(HttpClient httpClient, ILogger<CommentProxy> logger)
         {
             _httpClient = httpClient;
             _url = "https://jsonplaceholder.typicode.com/comments";
@@ -31,13 +31,25 @@ namespace Ptncafe.GraphQLTest.Proxy
             return result;
         }
 
+        public async Task<Comment> GetCommentById(int id, CancellationToken cancellationToken)
+        {
+            var url = $"{_url}/{id}";
+            var response = await _httpClient.GetAsync(url, cancellationToken);
+            _logger.LogInformation("GetComments {0} => {1}", url, response);
+            var responseString = await response.Content.ReadAsStringAsync();
+            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<Comment>(responseString);
+            return result;
+        }
+
         public async Task<Comment> AddUpdateComments(Comment requestData, CancellationToken cancellationToken)
         {
             HttpResponseMessage response;
             if (requestData.Id == 0)
                 response = await _httpClient.PostAsJsonAsync(_url, requestData, cancellationToken);
             else
-                response = await _httpClient.PutAsJsonAsync(_url, requestData, cancellationToken);
+                response = await _httpClient.PutAsJsonAsync($"{_url}/{requestData.Id}", requestData, cancellationToken);
+
+            response.EnsureSuccessStatusCode();
 
             _logger.LogInformation("AddUpdateComments {0} => {1}", _url, response);
 

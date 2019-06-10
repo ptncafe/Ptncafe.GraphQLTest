@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Ptncafe.GraphQLTest.Api.Model
 {
-    public class CommentInputType : InputObjectGraphType
+    public class CommentUpdateInputType : InputObjectGraphType
     {
-        public CommentInputType()
+        public CommentUpdateInputType()
         {
-            Name = "CommentInput";
+            Name = "CommentUpdateInput";
             Field<NonNullGraphType<GraphQL.Types.IntGraphType>>("Id");
             Field<NonNullGraphType<GraphQL.Types.IntGraphType>>("PostId");
             Field<StringGraphType>("Name");

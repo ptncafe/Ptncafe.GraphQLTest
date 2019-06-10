@@ -1,12 +1,5 @@
 ﻿using GraphQL;
-using GraphQL.Subscription;
 using GraphQL.Types;
-using Microsoft.AspNetCore.WebUtilities;
-using Ptncafe.GraphQLTest.Api.Model;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
 {
@@ -21,8 +14,4 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
             Mutation = resolver.Resolve<CommentMutation>();
         }
     }
-
-    
-
-   
 }

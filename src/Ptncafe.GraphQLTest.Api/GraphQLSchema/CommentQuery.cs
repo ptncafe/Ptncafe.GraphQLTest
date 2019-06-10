@@ -1,6 +1,7 @@
 ﻿using GraphQL.Subscription;
 using GraphQL.Types;
 using Microsoft.AspNetCore.WebUtilities;
+using Ptncafe.GraphQLTest.Api.Infractstructure;
 using Ptncafe.GraphQLTest.Api.Model;
 using Ptncafe.GraphQLTest.Proxy;
 using Ptncafe.GraphQLTest.Proxy.Dto;
@@ -14,44 +15,40 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
 {
     public class CommentQuery : ObjectGraphType
     {
-        public CommentQuery(IConmentProxy conmentProxy)
+        public CommentQuery(ICommentProxy conmentProxy)
         {
-            FieldAsync<ListGraphType<CommentType>>("comments",
+            FieldAsync<ListGraphType<CommentType>>(nameof(CommentType).FirstCharToLower(),
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
                     new QueryArgument<IdGraphType>
                     {
-                        Name = "id"
+                        Name = nameof(Comment.Id).FirstCharToLower()
                     },
                     new QueryArgument<GraphQL.Types.StringGraphType>
                     {
-                        Name = "name"
+                        Name = nameof(Comment.Name).FirstCharToLower()
                     },
                     new QueryArgument<GraphQL.Types.StringGraphType>
                     {
-                        Name = "email"
+                        Name =nameof(Comment.Email).FirstCharToLower()
                     },
-                    //new QueryArgument<GraphQL.Types.StringGraphType>
-                    //{
-                    //    Name = "body"
-                    //},
                     new QueryArgument<GraphQL.Types.IntGraphType>
                     {
-                        Name = "postId"
+                        Name = nameof(Comment.PostId).FirstCharToLower()
                     }
                 }),
                 resolve: async context =>
                 {
                     var queryParams = new Dictionary<string, string>();
-                    var postIdArgument = context.GetArgument<int?>("postId");
+                    var postIdArgument = context.GetArgument<int?>(nameof(Comment.PostId).FirstCharToLower());
                     if (postIdArgument.HasValue)
                     {
-                        queryParams.Add("postId", postIdArgument.Value.ToString());
+                        queryParams.Add(nameof(Comment.PostId).FirstCharToLower(), postIdArgument.Value.ToString());
                     }
-                    var idArgument = context.GetArgument<int?>("id");
+                    var idArgument = context.GetArgument<int?>(nameof(Comment.Id).FirstCharToLower());
                     if (idArgument.HasValue)
                     {
-                        queryParams.Add("id", idArgument.Value.ToString());
+                        queryParams.Add(nameof(Comment.Id).FirstCharToLower(), idArgument.Value.ToString());
                     }
                     return await conmentProxy.GetComments(queryParams, context.CancellationToken);
 
