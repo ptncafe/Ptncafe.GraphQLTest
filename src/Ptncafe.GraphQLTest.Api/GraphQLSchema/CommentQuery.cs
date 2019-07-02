@@ -17,21 +17,21 @@ namespace Ptncafe.GraphQLTest.Api.GraphQLSchema
     {
         public CommentQuery(ICommentProxy conmentProxy)
         {
-            FieldAsync<ListGraphType<CommentType>>(nameof(CommentType).FirstCharToLower(),
+            FieldAsync<ListGraphType<CommentType>>("queryComment",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
                     new QueryArgument<IdGraphType>
                     {
                         Name = nameof(Comment.Id).FirstCharToLower()
                     },
-                    new QueryArgument<GraphQL.Types.StringGraphType>
-                    {
-                        Name = nameof(Comment.Name).FirstCharToLower()
-                    },
-                    new QueryArgument<GraphQL.Types.StringGraphType>
-                    {
-                        Name =nameof(Comment.Email).FirstCharToLower()
-                    },
+                    //new QueryArgument<GraphQL.Types.StringGraphType>
+                    //{
+                    //    Name = nameof(Comment.Name).FirstCharToLower()
+                    //},
+                    //new QueryArgument<GraphQL.Types.StringGraphType>
+                    //{
+                    //    Name =nameof(Comment.Email).FirstCharToLower()
+                    //},
                     new QueryArgument<GraphQL.Types.IntGraphType>
                     {
                         Name = nameof(Comment.PostId).FirstCharToLower()
